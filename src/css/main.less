@@ -1,0 +1,86 @@
+@inputColor: #508ecf;
+
+*,
+*:before,
+*:after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Droid Serif', serif;
+    font-size: 16px;
+    background: url("../img/background.jpeg");
+}
+
+header {
+    margin-bottom: 50px;
+    text-align: center;
+
+    input {
+        border: 2px solid @inputColor;
+        border-radius: 5px;
+        font-size: 160%;
+        margin: 0 auto;
+        width: 100%;
+        padding: 13px 90px 13px 10px;
+    }
+
+    button {
+        position: absolute;
+        right: 0;
+        top: 0;
+        border: 2px solid @inputColor;
+        border-radius: 5px;
+        font-size: 160%;
+        height: 60px;
+        width: 80px;
+        color: @inputColor;
+    }
+}
+
+section {
+    text-align: center;
+    font-size: 115%;
+}
+
+img {
+    vertical-align: middle;
+    max-width: 100%;
+}
+
+.container {
+    margin: 10% auto;
+    max-width: 800px;
+    padding: 0 8px;
+}
+
+.search-location {
+    position: relative;
+}
+
+#location {
+    font-weight: bold;
+}
+
+#description {
+    font-style: italic;
+    color: grey;
+}
+
+#error {
+    color: #D8000C;
+    background-color: #FFBABA;
+    border: 1px solid;
+    padding: 10px;
+    position: relative;
+
+    .fa-times-circle {
+        font-size: 1.5em;
+        position: absolute;
+        left: 2%;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+}

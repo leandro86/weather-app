@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Droid+Serif" rel="stylesheet" type="text/css">
+    <!-- build:css -->
+    <link rel="stylesheet" href="css/vendors/normalize.css"/>
+    <link rel="stylesheet" href="css/vendors/font-awesome.css"/>
+    <link rel="stylesheet" href="css/main.css"/>
+    <!-- endbuild -->
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Weather App</h1>
+
+        <div class="search-location">
+            <input type="text" data-bind="textInput: location, enterkey: getCurrentWeather, hasFocus: true" placeholder="City, Country"/>
+            <button id="search-button" data-bind="click: getCurrentWeather"><i class="fa fa-search"></i></button>
+        </div>
+    </header>
+
+    <section>
+        <div data-bind="with: weatherData, visible: showWeatherData() && !errorMessage()">
+            <span>
+                <span id="location" data-bind="text: formattedLocation"></span>
+                <img data-bind="attr: {src:countryIconUrl}" alt=""/>
+                <span data-bind="text: formattedCurrentTemperature"></span>
+                <br/>
+                <img data-bind="attr: {src:iconUrl}" alt=""/>
+                <span id="description" data-bind="text: description"></span>
+            </span>
+
+            <p data-bind="text: formattedWeatherData"></p>
+
+            <p>
+                Geo coords: <a data-bind="text: formattedGeoCoords, attr: {href: $root.getGoogleMapUrl(latitude(), longitude())}"></a>
+            </p>
+        </div>
+        <div id="error" data-bind="visible: errorMessage">
+            <i class="fa fa-times-circle"></i>
+            <span data-bind="text: errorMessage"></span>
+        </div>
+    </section>
+</div>
+
+<!-- build:js -->
+<script src="js/vendors/jquery-1.11.3.min.js"></script>
+<script src="js/vendors/knockout-3.3.0.min.js"></script>
+<script src="js/main.js"></script>
+<!-- endbuild -->
+
+</body>
+</html>
