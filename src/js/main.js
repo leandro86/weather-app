@@ -72,6 +72,7 @@ $(function() {
         self.apiKey = "bd82977b86bf27fb59a04b61b657fb6f";
         self.weatherData = new WeatherData();
         self.showWeatherData = ko.observable(false);
+        self.isLoadingWeatherData = ko.observable(false);
         self.errorMessage = ko.observable("");
         self.location = ko.observable("");
 
@@ -97,9 +98,13 @@ $(function() {
                 self.errorMessage(weatherData.hasOwnProperty("message") ? weatherData.message : "Unknown error");
                 self.showWeatherData(false);
             }
+            self.isLoadingWeatherData(false);
         };
 
         self.getCurrentWeather = function() {
+            self.isLoadingWeatherData(true);
+            self.errorMessage("");
+
             var url = self.buildUrl(self.location());
             $.get(url).done(self.updateCurrentWeather).error(self.onError);
         };
@@ -107,6 +112,7 @@ $(function() {
         self.onError = function() {
             self.showWeatherData(false);
             self.errorMessage("Connection error");
+            self.isLoadingWeatherData(false);
         };
 
         self.getGoogleMapUrl = function(latitude, longitude) {

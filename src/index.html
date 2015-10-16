@@ -26,7 +26,7 @@
     </header>
 
     <section>
-        <div data-bind="with: weatherData, visible: showWeatherData() && !errorMessage()">
+        <div data-bind="with: weatherData, visible: showWeatherData() && !errorMessage() && !isLoadingWeatherData()">
             <span>
                 <span id="location" data-bind="text: formattedLocation"></span>
                 <img data-bind="attr: {src:countryIconUrl}" alt=""/>
@@ -45,6 +45,9 @@
         <div id="error" data-bind="visible: errorMessage">
             <i class="fa fa-times-circle"></i>
             <span data-bind="text: errorMessage"></span>
+        </div>
+        <div data-bind="visible: isLoadingWeatherData">
+            <i class="fa fa-spinner fa-pulse fa-3x"></i>
         </div>
     </section>
 </div>
