@@ -61,6 +61,15 @@ gulp.task("css", function() {
         .pipe(gulp.dest(path.join(paths.baseOutputDir, paths.css.outputDir)));
 });
 
+gulp.task("compile-less", function() {
+    return gulp.src(paths.css.app)
+        .pipe(less())
+        .pipe(autoprefixer("last 2 versions"))
+        .pipe(gulp.dest(function(file) {
+            return file.base;
+        }));
+});
+
 gulp.task("js:lint", function() {
     return gulp.src(paths.js.app)
         .pipe(jshint())
@@ -103,6 +112,11 @@ gulp.task("copy-fonts", function() {
 gulp.task("copy-images", function() {
     return gulp.src(paths.fonts.sourceDir)
         .pipe(gulp.dest(path.join(paths.baseOutputDir, paths.fonts.outputDir)));
+});
+
+// watch: only compile less files
+gulp.task("watch", function() {
+    gulp.watch(paths.css.app, ["compile-less"]);
 });
 
 // development: only compile less and linting
