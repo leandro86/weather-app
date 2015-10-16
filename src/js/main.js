@@ -68,7 +68,7 @@ $(function() {
     function WeatherViewModel() {
         var self = this;
 
-        self.baseUrl = "http://api.openweathermap.org/data/2.5/weather?q=";
+        self.baseUrl = "http://api.openweathermap.org/data/2.5/weather";
         self.apiKey = "bd82977b86bf27fb59a04b61b657fb6f";
         self.weatherData = new WeatherData();
         self.showWeatherData = ko.observable(false);
@@ -92,6 +92,8 @@ $(function() {
                 self.weatherData.description(weatherData.weather[0].description);
                 self.weatherData.iconName(weatherData.weather[0].icon);
 
+                self.location(self.weatherData.city() + ", " + self.weatherData.country());
+
                 self.showWeatherData(true);
                 self.errorMessage("");
             } else {
@@ -101,15 +103,29 @@ $(function() {
             self.isLoadingWeatherData(false);
         };
 
-        self.getCurrentWeather = function() {
+        self.getCurrentWeatherByLocation = function() {
             self.isLoadingWeatherData(true);
             self.errorMessage("");
 
-            var url = self.buildUrl(self.location());
-            $.get(url).done(self.updateCurrentWeather).error(self.onError);
+            var url = self.buidUrlByLocation(self.location());
+            $.get(url).done(self.updateCurrentWeather).error(self.onErrorGettingData);
         };
 
-        self.onError = function() {
+        self.getCurrentWeatherByCoords = function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(self.onGetCoordsOk);
+            }
+        };
+
+        self.onGetCoordsOk = function(position) {
+            self.isLoadingWeatherData(true);
+            self.errorMessage("");
+
+            var url = self.buidUrlByCoords(position);
+            $.get(url).done(self.updateCurrentWeather).error(self.onErrorGettingData);
+        };
+
+        self.onErrorGettingData = function() {
             self.showWeatherData(false);
             self.errorMessage("Connection error");
             self.isLoadingWeatherData(false);
@@ -119,8 +135,19 @@ $(function() {
             return "https://www.google.com/maps/@" + latitude + "," + longitude + ",12z";
         };
 
-        self.buildUrl = function(location) {
-            return self.baseUrl + location + "&units=metric" + "&appid=" + self.apiKey;
+        self.buidUrlByLocation = function(location) {
+            return self.baseUrl +
+                "?q=" + location +
+                "&units=metric" +
+                "&appid=" + self.apiKey;
+        };
+
+        self.buidUrlByCoords = function(position) {
+            return self.baseUrl +
+                "?lat=" + position.coords.latitude +
+                "&lon=" + position.coords.longitude +
+                "&units=metric" +
+                "&appid=" + self.apiKey;
         };
     }
 

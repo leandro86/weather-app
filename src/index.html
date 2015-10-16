@@ -20,12 +20,14 @@
         <h1>Weather App</h1>
 
         <div class="search-location">
-            <input type="text" data-bind="textInput: location, enterkey: getCurrentWeather, hasFocus: true" placeholder="City, Country"/>
-            <button id="search-button" data-bind="click: getCurrentWeather"><i class="fa fa-search"></i></button>
+            <input type="text" data-bind="textInput: location, enterkey: getCurrentWeatherByLocation, hasFocus: true" placeholder="City, Country"/>
+            <button id="search-button" data-bind="click: getCurrentWeatherByLocation"><i class="fa fa-search"></i></button>
+            <button id="geo-button" data-bind="click: getCurrentWeatherByCoords"><i class="fa fa-map-marker"></i></button>
         </div>
     </header>
 
     <section>
+
         <div data-bind="with: weatherData, visible: showWeatherData() && !errorMessage() && !isLoadingWeatherData()">
             <span>
                 <span id="location" data-bind="text: formattedLocation"></span>

@@ -9,7 +9,7 @@ body {
   background: url("../img/background.jpeg");
 }
 header {
-  margin-bottom: 50px;
+  margin-bottom: 1.5em;
   text-align: center;
 }
 header input {
@@ -19,17 +19,6 @@ header input {
   margin: 0 auto;
   width: 100%;
   padding: 13px 90px 13px 10px;
-}
-header button {
-  position: absolute;
-  right: 0;
-  top: 0;
-  border: 2px solid #508ecf;
-  border-radius: 5px;
-  font-size: 160%;
-  height: 60px;
-  width: 80px;
-  color: #508ecf;
 }
 section {
   text-align: center;
@@ -68,4 +57,21 @@ img {
   top: 50%;
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%);
+}
+#search-button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  border: 2px solid #508ecf;
+  border-radius: 5px;
+  font-size: 160%;
+  height: 60px;
+  width: 80px;
+  color: #508ecf;
+}
+#geo-button {
+  color: #A01F24;
+  margin-top: 0.5em;
+  border: 1px solid;
+  border-radius: 10px;
 }
