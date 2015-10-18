@@ -31,7 +31,7 @@ $(function() {
         self.iconName = ko.observable("");
 
         self.formattedCurrentTemperature = ko.pureComputed(function() {
-            return self.formatTemperature(self.currentTemperature());
+            return self._formatTemperature(self.currentTemperature());
         });
 
         self.formattedLocation = ko.pureComputed(function() {
@@ -39,13 +39,13 @@ $(function() {
         });
 
         self.formattedWeatherData = ko.pureComputed(function() {
-            var temperatureRange = "min " + self.formatTemperature(self.minTemperature()) + " max " + self.formatTemperature(self.maxTemperature());
+            var temperatureRange = "min " + self._formatTemperature(self.minTemperature()) + " max " + self._formatTemperature(self.maxTemperature());
             var wind = "wind " + self.windSpeed() + "m/s";
             var cloudiness = "clouds " + self.cloudiness() + "%";
             var pressure = "pressure " + self.pressure() + " hpa";
             var humidity = "humidity " + self.humidity() + "%";
 
-            return temperatureRange + ", " + wind + ", " + cloudiness + ", " + pressure + ", " + humidity;
+            return [temperatureRange, wind, cloudiness, pressure, humidity].join(", ");
         });
 
         self.formattedGeoCoords = ko.pureComputed(function() {
@@ -60,7 +60,7 @@ $(function() {
             return "http://openweathermap.org/images/flags/" + self.country().toLowerCase() + ".png";
         });
 
-        self.formatTemperature = function(temperature) {
+        self._formatTemperature = function(temperature) {
             return temperature + "\xB0C";
         };
     }
@@ -68,13 +68,14 @@ $(function() {
     function WeatherViewModel() {
         var self = this;
 
-        self.baseUrl = "http://api.openweathermap.org/data/2.5/weather";
-        self.apiKey = "bd82977b86bf27fb59a04b61b657fb6f";
         self.weatherData = new WeatherData();
         self.showWeatherData = ko.observable(false);
         self.isLoadingWeatherData = ko.observable(false);
         self.errorMessage = ko.observable("");
         self.location = ko.observable("");
+
+        self._baseUrl = "http://api.openweathermap.org/data/2.5/weather";
+        self._apiKey = "bd82977b86bf27fb59a04b61b657fb6f";
 
         self.updateCurrentWeather = function(weatherData) {
             if (weatherData.hasOwnProperty("sys")) {
@@ -107,47 +108,47 @@ $(function() {
             self.isLoadingWeatherData(true);
             self.errorMessage("");
 
-            var url = self.buidUrlByLocation(self.location());
-            $.get(url).done(self.updateCurrentWeather).error(self.onErrorGettingData);
+            var url = self._buidUrlByLocation(self.location());
+            $.get(url).done(self.updateCurrentWeather).error(self._onErrorGettingData);
         };
 
         self.getCurrentWeatherByCoords = function() {
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(self.onGetCoordsOk);
+                navigator.geolocation.getCurrentPosition(self._onGetCoordsOk);
             }
-        };
-
-        self.onGetCoordsOk = function(position) {
-            self.isLoadingWeatherData(true);
-            self.errorMessage("");
-
-            var url = self.buidUrlByCoords(position);
-            $.get(url).done(self.updateCurrentWeather).error(self.onErrorGettingData);
-        };
-
-        self.onErrorGettingData = function() {
-            self.showWeatherData(false);
-            self.errorMessage("Connection error");
-            self.isLoadingWeatherData(false);
         };
 
         self.getGoogleMapUrl = function(latitude, longitude) {
             return "https://www.google.com/maps/@" + latitude + "," + longitude + ",12z";
         };
 
-        self.buidUrlByLocation = function(location) {
-            return self.baseUrl +
+        self._buidUrlByLocation = function(location) {
+            return self._baseUrl +
                 "?q=" + location +
                 "&units=metric" +
-                "&appid=" + self.apiKey;
+                "&appid=" + self._apiKey;
         };
 
-        self.buidUrlByCoords = function(position) {
-            return self.baseUrl +
+        self._buidUrlByCoords = function(position) {
+            return self._baseUrl +
                 "?lat=" + position.coords.latitude +
                 "&lon=" + position.coords.longitude +
                 "&units=metric" +
-                "&appid=" + self.apiKey;
+                "&appid=" + self._apiKey;
+        };
+
+        self._onGetCoordsOk = function(position) {
+            self.isLoadingWeatherData(true);
+            self.errorMessage("");
+
+            var url = self._buidUrlByCoords(position);
+            $.get(url).done(self.updateCurrentWeather).error(self._onErrorGettingData);
+        };
+
+        self._onErrorGettingData = function() {
+            self.showWeatherData(false);
+            self.errorMessage("Connection error");
+            self.isLoadingWeatherData(false);
         };
     }
 
