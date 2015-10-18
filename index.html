@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather App</title>
+    <meta name="description" content="A weather app">
+    <meta name="keywords" content="weather"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Droid+Serif" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="css/styles.min.css">
+
+</head>
+<body>
+
+<div class="container" style="display: none" data-bind="visible: true">
+    <header>
+        <h1>Weather App</h1>
+
+        <div class="search-location">
+            <input type="text" data-bind="textInput: location, enterkey: getCurrentWeatherByLocation, hasFocus: true" placeholder="City, Country"/>
+            <button id="search-button" data-bind="click: getCurrentWeatherByLocation"><i class="fa fa-search"></i></button>
+            <button id="geo-button" data-bind="click: getCurrentWeatherByCoords"><i class="fa fa-map-marker"></i></button>
+        </div>
+    </header>
+
+    <section>
+
+        <div data-bind="with: weatherData, visible: showWeatherData() && !errorMessage() && !isLoadingWeatherData()">
+            <span>
+                <span id="location" data-bind="text: formattedLocation"></span>
+                <img data-bind="attr: {src:countryIconUrl}" alt=""/>
+                <span data-bind="text: formattedCurrentTemperature"></span>
+                <br/>
+                <img data-bind="attr: {src:iconUrl}" alt=""/>
+                <span id="description" data-bind="text: description"></span>
+            </span>
+
+            <p data-bind="text: formattedWeatherData"></p>
+
+            <p>
+                Geo coords: <a data-bind="text: formattedGeoCoords, attr: {href: $root.getGoogleMapUrl(latitude(), longitude())}"></a>
+            </p>
+        </div>
+        <div id="error" data-bind="visible: errorMessage">
+            <i class="fa fa-times-circle"></i>
+            <span data-bind="text: errorMessage"></span>
+        </div>
+        <div data-bind="visible: isLoadingWeatherData">
+            <i class="fa fa-spinner fa-pulse fa-3x"></i>
+        </div>
+    </section>
+</div>
+
+<script src="js/app.min.js"></script>
+
+
+</body>
+</html>
